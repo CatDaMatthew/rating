@@ -1,0 +1,2 @@
+# rating
+rates a name
