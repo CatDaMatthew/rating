@@ -33,50 +33,32 @@
     </style>
 </head>
 <body style="font-family:Arial; text-align:center; margin-top:50px;">
-    <h1>How was your experience at bike fest</h1>
-
-    <!-- List of items -->
-    <ul id="log-list"></ul>
+    <body>
+    <h1>How was your experience at bike feast</h1>
+    <ul id="log-list">
+        {% for item in log %}
+        <li>
+            <img src="/static/{{ item }}.png" alt="{{ item }}" data-name="{{ item }}">
+        </li>
+        {% endfor %}
+    </ul>
 
     <script>
-        const logList = document.getElementById("log-list");
-        let currentLog = [];
-
-        function renderList(log) {
-            if (JSON.stringify(log) === JSON.stringify(currentLog)) return;
-            logList.innerHTML = "";
-            log.forEach(item => {
-                const li = document.createElement("li");
-                li.innerHTML = `<img src="/static/${item}.png" alt="${item}">`;
-
-                // click → tell server which item
-                li.addEventListener("click", async () => {
-                    try {
-                        await fetch("/item_clicked", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({"name": item})
-                        });
-                        window.location.href = "/";
-                    } catch (err) {
-                        console.error("Error sending click:", err);
-                    }
-                });
-
-                logList.appendChild(li);
+        const images = document.querySelectorAll("#log-list img");
+        images.forEach(img => {
+            img.addEventListener("click", async () => {
+                try {
+                    await fetch("/item_clicked", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: img.dataset.name })
+                    });
+                    window.location.href = "/";
+                } catch (err) {
+                    console.error("Error sending click:", err);
+                }
             });
-        }
-
-        // Poll for updates
-        setInterval(async () => {
-            try {
-                const response = await fetch("/get_log");
-                const data = await response.json();
-                renderList(data.log);
-            } catch (err) {
-                console.error("Polling error:", err);
-            }
-        }, 1000);
+        });
     </script>
 </body>
 </html>
