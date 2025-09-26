@@ -2,48 +2,33 @@
 <html>
 <head>
     <title>How was your experience at bike fest</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial;
             text-align: center;
             margin-top: 50px;
         }
-
-        /* Horizontal, responsive list */
+        h1 {
+            margin-bottom: 30px;
+        }
         #log-list {
-            list-style: none;
-            padding: 0;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;  /* wrap on small screens */
-            gap: 15px;        /* spacing between items */
-            font-size: 20px;
+            flex-wrap: wrap; /* wrap on small screens */
+            gap: 20px; /* space between faces */
+            padding: 0;
+            list-style: none;
         }
-
-        #log-list li {
+        #log-list li img {
             cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        #log-list li:hover {
-            background-color: #f0f0f0;
-            padding: 10px 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* Responsive image size */
-        #log-list img {
-            max-width: 80px;
-            width: 15vw;   /* scales with screen width */
+            max-width: 15vw; /* responsive width */
             height: auto;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        @media (max-width: 400px) {
-            #log-list img {
-                max-width: 60px;
-                width: 20vw;
-            }
+        #log-list li:hover img {
+            transform: scale(0.6);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -55,9 +40,10 @@
 
     <script>
         const logList = document.getElementById("log-list");
+        let currentLog = [];
 
-        // Helper: draw the log list
         function renderList(log) {
+            if (JSON.stringify(log) === JSON.stringify(currentLog)) return;
             logList.innerHTML = "";
             log.forEach(item => {
                 const li = document.createElement("li");
