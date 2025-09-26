@@ -16,7 +16,11 @@ def write(index):
     except (json.JSONDecodeError, FileNotFoundError):
         data = [0, 0, 0, 0, 0]
     data[index] += 1
-    logging.info(f"Data is: {data}")
+    total = sum(data)
+    logging.info(f"---------------")
+    for i,face in enumerate(faces):
+        logging.info(f"{face}: Data is {data} people, {data[i]/total*100:.2f}%")
+    logging.info(f"---------------")
     with open("save.json", "w") as file:
         json.dump(data, file)
 
