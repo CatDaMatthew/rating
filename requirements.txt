@@ -5,3 +5,4 @@ itsdangerous==2.2.0
 click==8.3.0
 MarkupSafe==3.0.2
 requests==2.32.4
+gunicorn==21.2.0
