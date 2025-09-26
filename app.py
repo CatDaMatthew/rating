@@ -14,6 +14,7 @@ def write(index):
     except (json.JSONDecodeError, FileNotFoundError):
         data = [0, 0, 0, 0, 0]
     data[index] += 1
+    print(data)
     with open("save.json", "w") as file:
         json.dump(data, file)
 
