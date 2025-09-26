@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How was your experience at bike fest</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Horizontal, responsive list */
+        #log-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;  /* wrap on small screens */
+            gap: 15px;        /* spacing between items */
+            font-size: 20px;
+        }
+
+        #log-list li {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #log-list li:hover {
+            background-color: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive image size */
+        #log-list img {
+            max-width: 80px;
+            width: 15vw;   /* scales with screen width */
+            height: auto;
+        }
+
+        @media (max-width: 400px) {
+            #log-list img {
+                max-width: 60px;
+                width: 20vw;
+            }
+        }
+    </style>
+</head>
+<body style="font-family:Arial; text-align:center; margin-top:50px;">
+    <h1>How was your experience at bike fest</h1>
+
+    <!-- List of items -->
+    <ul id="log-list"></ul>
+
+    <script>
+        const logList = document.getElementById("log-list");
+
+        // Helper: draw the log list
+        function renderList(log) {
+            logList.innerHTML = "";
+            log.forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `<img src="/static/${item}.png" alt="${item}">`;
+
+                // click → tell server which item
+                li.addEventListener("click", async () => {
+                    try {
+                        await fetch("/item_clicked", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({"name": item})
+                        });
+                        window.location.href = "/";
+                    } catch (err) {
+                        console.error("Error sending click:", err);
+                    }
+                });
+
+                logList.appendChild(li);
+            });
+        }
+
+        // Poll for updates
+        setInterval(async () => {
+            try {
+                const response = await fetch("/get_log");
+                const data = await response.json();
+                renderList(data.log);
+            } catch (err) {
+                console.error("Polling error:", err);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
