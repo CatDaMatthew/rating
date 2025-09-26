@@ -5,7 +5,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 app.secret_key = "thatmatt999"  # required for sessions
-
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 faces = ["great", "good", "okay", "notgood", "bad"]
 def write(index):
     data = []
@@ -33,7 +34,7 @@ def index():
     if session.get('done'):
         session.pop('done', None)
         return render_template("end.html", log=faces)
-    return render_template("index.html", log=faces)
+    return render_template("ask.html", log=faces)
 
 @app.route('/get_log', methods=['GET'])
 def get_log():
