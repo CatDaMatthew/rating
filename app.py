@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 import json, os
+import logging
 
+logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 app.secret_key = "thatmatt999"  # required for sessions
 
@@ -13,7 +15,7 @@ def write(index):
     except (json.JSONDecodeError, FileNotFoundError):
         data = [0, 0, 0, 0, 0]
     data[index] += 1
-    print(data)
+    logging.info(f"Data is: {data}")
     with open("save.json", "w") as file:
         json.dump(data, file)
 
