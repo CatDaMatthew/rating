@@ -4,8 +4,7 @@ import json, os
 app = Flask(__name__)
 app.secret_key = "thatmatt999"  # required for sessions
 
-faces = ["bad", "notgood", "okay", "good", "great"]
-
+faces = ["great", "good", "okay", "notgood", "bad"]
 def write(index):
     data = []
     try:
@@ -30,6 +29,7 @@ def item_clicked():
 @app.route('/')
 def index():
     if session.get('done'):
+        session.pop('done', None)
         return render_template("end.html", log=faces)
     return render_template("index.html", log=faces)
 
